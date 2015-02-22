@@ -1,3 +1,5 @@
+# Assignment for Practical Machine Learning - Coursera John Hopkins
+
 library(caret)
 library(ggplot2)
 
@@ -37,18 +39,13 @@ valset <- subset(valset, select = c(new_window,num_window,roll_belt,pitch_belt,y
 valset <- na.omit(valset)
 print(dim(valset))
 
-# rpart for straightforward CART decision tree
-# try out treebag for trees with bagging or rf for rand forest
-
+# create model - takes a long time even on a pretty fast computer
 model <- train(classe ~ ., method="treebag", data=trainset)
 preds <- predict(model, newdata=valset)
 
-# explore
+# explore results
 print(table(preds, valset$classe))
 # number of times we're right - indication for out of sample error
 print(sum(preds == valset$classe) / length(preds))
 
-# etc, see http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf
 
-# nice:
-# fancyRpartPlot(model$finalModel) from lib rattle (rpart.plot)
