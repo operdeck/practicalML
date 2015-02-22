@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>PracticalML by perdoperdo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>PracticalML</h1>
+        <p>Practical Machine Learning - Coursera John Hopkins</p>
+
+        <p class="view"><a href="https://github.com/perdoperdo/practicalML">View the Project on GitHub <small>perdoperdo/practicalML</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/perdoperdo/practicalML/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/perdoperdo/practicalML/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/perdoperdo/practicalML">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="goal" class="anchor" href="#goal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal</h1>
+
+<p>Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it.</p>
+
+<p>In this project, our goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants to predict how well the subjects are doing the exercises.</p>
+
+<h1>
+<a id="data" class="anchor" href="#data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data</h1>
+
+<p>The subjects were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a> (see the section on the Weight Lifting Exercise Dataset).</p>
+
+<p>The training data for this project are available here: </p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</a></p>
+
+<p>The test data are available here: </p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
+
+<p>The correct outcomes are in the "classe" variable in the training set.</p>
+
+<h1>
+<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span class="octicon octicon-link"></span></a>Approach</h1>
+
+<ol>
+<li>Get train and test data</li>
+<li>Divide train data into train/validate</li>
+<li>Clean up the train data</li>
+<li>Build model</li>
+<li>Estimate out of sample error</li>
+<li>Apply on test data to predict outcomes</li>
+</ol>
+
+<h2>
+<a id="data-cleaning" class="anchor" href="#data-cleaning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data cleaning</h2>
+
+<p>Using exploratory analysis it was clear that many columns in the training set had missing data. Using simple
+visualization and tabularization we have de-selected the columns that had a large percentage of missing values. 
+We have been considering techniques to fill in the missings using KNN or such but decided to only do so if the
+expected out of sample error was large. This turned out not to be the case, so the model was built with this
+smaller subset of columns.</p>
+
+<p>A second problem was in the format of the data itself. Some values in the trainingset looked like the Excel
+divide-by-zero error and we replaced those by NA. Also, there was one row which seemed incorrectly formatted:
+row 15350 seemed to have an comma extra, resulting in a mismatch of columns. This was manually fixed.</p>
+
+<h2>
+<a id="model-creation" class="anchor" href="#model-creation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model creation</h2>
+
+<p>As the outcome was a categorial variable, the obvious choice was to use some sort of tree building model. We
+started with simple CART but the out of sample error was big (only ca 50% correct). Switching to the bagged
+version of it (method="treebag") made a tremendous improvement.</p>
+
+<h2>
+<a id="out-of-sample-error" class="anchor" href="#out-of-sample-error" aria-hidden="true"><span class="octicon octicon-link"></span></a>Out of Sample error</h2>
+
+<p>The results in a table of predicted outcome on the validation set (40% of the sample) vs the actuals from the
+validation set are as follows:</p>
+
+<pre><code>preds         A    B    C    D    E
+         0    0    0    0    0    0
+    A    0 2230   11    0    0    0
+    B    0    1 1501    8    3    1
+    C    0    0    5 1358   10    0
+    D    0    0    1    2 1272    4
+    E    0    0    0    0    1 1437
+</code></pre>
+
+<p>The percentage correct predictions is <strong>99.40%</strong>.</p>
+
+<p>The expected <strong>out of sample error</strong> is thus <strong>0.60%</strong>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/perdoperdo">perdoperdo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
